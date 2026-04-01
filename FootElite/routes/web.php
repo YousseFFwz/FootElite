@@ -25,6 +25,8 @@ Route::middleware(['auth', 'role:player'])->group(function () {
 
 
     Route::get('/player-games/create', [PlayerGameController::class, 'create']);
+    Route::post('/player-games', [PlayerGameController::class, 'store']);
+    Route::get('/player-games', [PlayerGameController::class, 'index']);
 
 
 
