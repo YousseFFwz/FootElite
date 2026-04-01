@@ -87,6 +87,18 @@ class PlayerGameController extends Controller
         }
 
 
+        public function show($id)
+        {
+            $game = PlayerGame::with('players', 'messages.user', 'terrain')
+                ->findOrFail($id);
+
+            if (!$game->players->contains(auth()->id())) {
+                return redirect('/player-games')->with('error', 'Access denied');
+            }
+
+            return view('player_games.show', compact('game'));
+        }
+
 
 
 }
