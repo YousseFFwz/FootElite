@@ -51,7 +51,14 @@ class AuthController extends Controller
         return $this->redirectByRole();
     }
 
+    public function showLogin()
+    {
+        return view('auth.login');
+    }
 
+
+
+    
 
     private function redirectByRole()
     {
