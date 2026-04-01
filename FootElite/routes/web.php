@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerGameController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -34,5 +35,11 @@ Route::middleware(['auth', 'role:player'])->group(function () {
     Route::post('/player-games/{id}/message', [MessageController::class, 'store']);
 
 
+
+});
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/players', [PlayerController::class, 'index']);
 
 });
