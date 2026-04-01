@@ -41,6 +41,13 @@ class PlayerGameController extends Controller
             return redirect('/player-games')->with('success', 'Match created');
         }
 
+        public function index()
+        {
+            $games = PlayerGame::with('players', 'terrain')->get();
+
+            return view('player_games.index', compact('games'));
+        }
+
 
 
 }
