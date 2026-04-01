@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PlayerGame;
+use App\Models\Terrain;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -10,7 +11,7 @@ class PlayerGameController extends Controller
 {
      public function create()
     {
-        $terrains = \App\Models\Terrain::all();
+        $terrains = Terrain::all();
         return view('player_games.create', compact('terrains'));
     }
 
@@ -47,6 +48,44 @@ class PlayerGameController extends Controller
 
             return view('player_games.index', compact('games'));
         }
+
+
+
+        public function join($id)
+        {
+            $game = PlayerGame::with('players')->findOrFail($id);
+
+            $userId = auth()->id();
+
+            if ($game->players->contains($userId)) {
+                return back()->with('error', 'You already joined this match');
+            }
+
+            $matchTime = Carbon::parse($game->match_date);
+
+            $conflict = PlayerGame::whereHas('players', function ($q) use ($userId) {
+                    $q->where('user_id', $userId);
+                })
+                ->where('match_date', $matchTime)
+                ->exists();
+
+            if ($conflict) {
+                return back()->with('error', 'You already have a match at this time');
+            }
+
+            if ($game->players->count() >= 10) {
+                return back()->with('error', 'Match is full');
+            }
+
+            $game->players()->attach($userId);
+
+            if ($game->players()->count() >= 10) {
+                $game->update(['status' => 'accepted']);
+            }
+
+            return back()->with('success', 'Joined successfully');
+        }
+
 
 
 
