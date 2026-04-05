@@ -38,6 +38,8 @@ Route::middleware(['auth', 'role:player'])->group(function () {
     Route::post('/player-games/{id}/message', [MessageController::class, 'store']);
 
     Route::get('/my-invites', [TeamInviteController::class, 'index']);
+    Route::post('/invite/{id}/accept', [TeamInviteController::class, 'accept']);
+    Route::post('/invite/{id}/reject', [TeamInviteController::class, 'reject']);
 
 
 });
