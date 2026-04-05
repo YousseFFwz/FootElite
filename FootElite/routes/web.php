@@ -7,6 +7,7 @@ use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerGameController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\TeamInviteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -36,6 +37,7 @@ Route::middleware(['auth', 'role:player'])->group(function () {
     Route::get('/player-games/{id}', [PlayerGameController::class, 'show']);
     Route::post('/player-games/{id}/message', [MessageController::class, 'store']);
 
+    Route::get('/my-invites', [TeamInviteController::class, 'index']);
 
 
 });
@@ -61,5 +63,6 @@ Route::middleware(['auth', 'role:team_owner'])->group(function () {
     Route::post('/games', [GameController::class, 'store']);
     Route::get('/games', [GameController::class, 'index']);
     Route::post('/games/{id}/accept', [GameController::class, 'accept']);
+    Route::post('/invite/{player}', [TeamInviteController::class, 'send']);
 
 });
