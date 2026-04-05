@@ -91,4 +91,43 @@ public function index(Request $request)
     return view('games.index', compact('games'));
 }
 
+
+public function accept($id)
+{
+    $game = Game::findOrFail($id);
+
+    $team = auth()->user()->team;
+
+    if ($game->team1_id == $team->id) {
+        return back()->with('error', 'You cannot accept your own match');
+    }
+
+    if ($team->players()->count() < 5) {
+        return back()->with('error', 'You need at least 5 players to accept a match');
+    }
+
+    if ($game->team2_id !== null) {
+        return back()->with('error', 'Match already accepted');
+    }
+
+    $conflict = Game::where(function ($q) use ($team) {
+            $q->where('team1_id', $team->id)
+              ->orWhere('team2_id', $team->id);
+        })
+        ->where('match_date', $game->match_date)
+        ->exists();
+
+    if ($conflict) {
+        return back()->with('error', 'Your team already has a match at this time');
+    }
+
+    $game->update([
+        'team2_id' => $team->id,
+        'status' => 'accepted'
+    ]);
+
+    return back()->with('success', 'Match accepted successfully');
+}
+
+
 }

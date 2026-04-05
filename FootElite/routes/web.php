@@ -60,5 +60,6 @@ Route::middleware(['auth', 'role:team_owner'])->group(function () {
     Route::get('/games/create', [GameController::class, 'create']);
     Route::post('/games', [GameController::class, 'store']);
     Route::get('/games', [GameController::class, 'index']);
+    Route::post('/games/{id}/accept', [GameController::class, 'accept']);
 
 });
