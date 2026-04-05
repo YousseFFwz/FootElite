@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GameController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerGameController;
@@ -55,5 +56,7 @@ Route::middleware(['auth', 'role:team_owner'])->group(function () {
     
     Route::get('/team', [TeamController::class, 'index']);
     Route::put('/team', [TeamController::class, 'update']);
+    
+    Route::get('/games/create', [GameController::class, 'create']);
 
 });
