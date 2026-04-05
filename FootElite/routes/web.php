@@ -5,6 +5,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerGameController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -52,4 +53,7 @@ Route::middleware(['auth', 'role:team_owner'])->group(function () {
         return view('team.dashboard');
     });
     
+    Route::get('/team', [TeamController::class, 'index']);
+    Route::put('/team', [TeamController::class, 'update']);
+
 });
