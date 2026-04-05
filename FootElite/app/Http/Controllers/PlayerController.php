@@ -26,4 +26,12 @@ class PlayerController extends Controller
 
             return view('players.index', compact('players', 'invites'));
         }
+
+
+        public function show($id)
+        {
+            $player = Profile::with('user')->findOrFail($id);
+
+            return view('players.show', compact('player'));
+        }
 }

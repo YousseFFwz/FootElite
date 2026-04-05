@@ -41,5 +41,15 @@ Route::middleware(['auth', 'role:player'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/players', [PlayerController::class, 'index']);
+    Route::get('/players/{id}', [PlayerController::class, 'show']);
 
+});
+
+
+
+Route::middleware(['auth', 'role:team_owner'])->group(function () {
+  Route::get('/team-dashboard', function () {  
+        return view('team.dashboard');
+    });
+    
 });
