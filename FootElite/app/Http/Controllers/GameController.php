@@ -130,4 +130,25 @@ public function accept($id)
 }
 
 
+public function myMatches()
+{
+    $teamId = auth()->user()->profile->team_id;
+
+    
+    if (!$teamId) {
+        return back()->with('error', 'You are not in a team');
+    }
+
+    $games = \App\Models\Game::with('team1', 'team2', 'terrain')
+        ->where(function ($q) use ($teamId) {
+            $q->where('team1_id', $teamId)
+              ->orWhere('team2_id', $teamId);
+        })
+        ->where('status', 'accepted') 
+        ->orderBy('match_date')
+        ->get();
+
+    return view('player.matches', compact('games'));
+}
+
 }

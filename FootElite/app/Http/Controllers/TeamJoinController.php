@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Profile;
 use App\Models\Team;
 use App\Models\TeamJoinRequest;
 use Illuminate\Http\Request;
@@ -57,4 +58,38 @@ class TeamJoinController extends Controller
 
             return view('team.requests', compact('requests'));
         }
+
+
+         public function accept($id)
+{
+    $request = TeamJoinRequest::findOrFail($id);
+
+    $profile = Profile::where('user_id', $request->player_id)->first();
+
+    if ($profile->team_id) {
+        return back()->with('error', 'Player already in a team');
+    }
+
+    $request->update([
+        'status' => 'accepted'
+    ]);
+
+    $profile->update([
+        'team_id' => $request->team_id
+    ]);
+
+    return back()->with('success', 'Player added to team');
+}
+
+
+public function reject($id)
+{
+    $request = TeamJoinRequest::findOrFail($id);
+
+    $request->update([
+        'status' => 'rejected'
+    ]);
+
+    return back()->with('success', 'Request rejected');
+}
 }

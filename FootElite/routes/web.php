@@ -46,6 +46,7 @@ Route::middleware(['auth', 'role:player'])->group(function () {
     Route::get('/teams/{team}', [TeamJoinController::class, 'show']);
     Route::post('/teams/{team}/join', [TeamJoinController::class, 'send']);
 
+    Route::get('/my-matches', [GameController::class, 'myMatches']);
 
 });
 
@@ -72,5 +73,7 @@ Route::middleware(['auth', 'role:team_owner'])->group(function () {
     Route::post('/games/{id}/accept', [GameController::class, 'accept']);
     Route::post('/invite/{player}', [TeamInviteController::class, 'send']);
     Route::get('/team/requests', [TeamJoinController::class, 'requests']);
+    Route::post('/team/requests/{id}/accept', [TeamJoinController::class, 'accept']);
+    Route::post('/team/requests/{id}/reject', [TeamJoinController::class, 'reject']);
 
 });
